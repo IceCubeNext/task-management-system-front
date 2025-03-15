@@ -5,6 +5,6 @@ export const host = {
     auth_path,
     path,
     tasks: path + '/tasks',
-    comments: path + '/comments',
+    users: path + '/users',
 }
 

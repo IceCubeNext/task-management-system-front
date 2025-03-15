@@ -22,6 +22,7 @@ const setup = (store) => {
         },
         async (err) => {
             const originalConfig = err.config;
+
             if (originalConfig.url !== host.auth_path + "/auth/sign-in" && err.response) {
                 //Access token was expired
                 if (err.response.status === 401 && !originalConfig.retry) {

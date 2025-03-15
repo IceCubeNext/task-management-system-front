@@ -44,8 +44,8 @@ export default {
     }
     const formData = {
       ID: currentUser.id,
-      Имя: currentUser.username,
-      Фамилия: currentUser.surname,
+      Имя: currentUser.firstName,
+      Фамилия: currentUser.lastName,
       Отчество: currentUser.patronymic,
       AccessToken: currentUser.accessToken,
       RefreshToken: currentUser.refreshToken,

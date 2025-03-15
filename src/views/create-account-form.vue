@@ -103,6 +103,8 @@ import notify from 'devextreme/ui/notify';
 import User from "@/models/user";
 import store from "@/store";
 import router from "@/router";
+import {host} from "@/api-config";
+import axios from "axios";
 
 export default {
   name: 'register-form',
@@ -132,6 +134,13 @@ export default {
           data => {
             this.message = data.message;
             this.loading = true;
+            if (data.id !== undefined) {
+              axios.post (host.users, {"id": data.id,
+                                          "firstname": data.firstName,
+                                          "lastname": data.lastName,
+                                          "patronymic": data.patronymic,
+              }, {})
+            }
             router.push('/profile-page');
           },
           error => {
