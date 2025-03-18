@@ -1,4 +1,5 @@
-# finn-front
+# Task management system 
+Веб - интерфейс приложения https://github.com/IceCubeNext/task-management-system
 
 ## Project setup
 ```

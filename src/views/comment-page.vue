@@ -7,15 +7,9 @@
                 :allow-column-reordering="true">
       <DxColumn data-field="title" caption="Название"></DxColumn>
       <DxColumn data-field="description" caption="Описание"></DxColumn>
-      <DxColumn data-field="author.id" caption="Автор">
-        <DxLookup
-            :data-source="usersStore"
-            value-expr="id"
-            display-expr="firstname"
-        />
-      </DxColumn>
-      <DxFilterRow :visible="true" />
-      <DxSearchPanel :visible="true" />
+      <DxColumn data-field="author.fullName" caption="Автор" :allow-editing="false"/>
+      <DxFilterRow :visible="true"/>
+      <DxSearchPanel :visible="true"/>
       <DxEditing
           mode="popup"
           :allow-updating="true"
@@ -35,7 +29,6 @@
 <script>
 import {
   DxDataGrid,
-  DxLookup,
   DxColumn,
   DxFilterRow,
   DxSearchPanel,
@@ -52,11 +45,9 @@ import {useRoute} from "vue-router";
 
 export default {
   name: "tasks-list-page",
-  computed: {
-  },
+  computed: {},
   components: {
     DxDataGrid,
-    DxLookup,
     DxColumn,
     DxFilterRow,
     DxSearchPanel,
@@ -69,7 +60,8 @@ export default {
     this.id = route.params.id
     const url = host.tasks + '/' + `${this.id}` + "/comments"
     this.commentsStore = new CustomStore({
-      load: () => {
+      key: "id",
+      load: async () => {
         return api.get(url, {})
             .then(response => {
               return response.data
@@ -79,7 +71,7 @@ export default {
               }
             })
       },
-      insert: (item) => {
+      insert: async (item) => {
         return api.post(url, item, {})
             .then(response => {
               return response.data;
@@ -89,7 +81,7 @@ export default {
               }
             })
       },
-      update: (id, item) => {
+      update: async (id, item) => {
         return api.patch(url + '/' + id, item, {})
             .then(response => {
               return response.data;
@@ -99,7 +91,7 @@ export default {
               }
             })
       },
-      remove: (id) => {
+      remove: async (id) => {
         return api.delete(url + '/' + id, {})
             .then(response => {
               return response.data;
@@ -108,7 +100,17 @@ export default {
                 EventBus.dispatch("logout");
               }
             })
-      }
+      },
+      byKey: async (key) => {
+        return api.get(url + '/' + `${key}`, {})
+            .then(response => {
+              return response.data
+            }).catch(error => {
+              if (error.response && error.response.status === 403) {
+                EventBus.dispatch("logout");
+              }
+            })
+      },
     })
   },
   data() {
@@ -129,6 +131,7 @@ h2 {
 .logos-container {
   margin: 20px 0 40px 0;
   text-align: center;
+
   svg {
     display: inline-block;
   }
@@ -155,6 +158,7 @@ h2 {
   svg {
     width: 100%;
     display: block;
+
     &.plus {
       margin: 0;
     }

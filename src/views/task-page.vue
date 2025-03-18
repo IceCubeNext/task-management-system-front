@@ -1,5 +1,6 @@
 <template>
   <h2>Задачи</h2>
+  <p>*Двойной клик по задаче - открыть комментарии</p>
   <div class="app-container">
     <DxDataGrid :data-source="tasksStore"
                 :allow-column-resizing="true"
@@ -22,18 +23,12 @@
             display-expr="nameRu"
         />
       </DxColumn>
-      <DxColumn data-field="author.id" caption="Автор">
-        <DxLookup
-            :data-source="usersStore"
-            value-expr="id"
-            display-expr="firstname"
-        />
-      </DxColumn>
+      <DxColumn data-field="author.fullName" caption="Автор" :allow-editing="false"/>
       <DxColumn data-field="performer.id" caption="Исполнитель">
         <DxLookup
             :data-source="usersStore"
             value-expr="id"
-            display-expr="firstname"
+            display-expr="fullName"
         />
       </DxColumn>
       <DxFilterRow :visible="true"/>
@@ -101,7 +96,7 @@ export default {
 </script>
 <style lang="scss">
 
-h2 {
+h2, p {
   margin-left: 15px;
   padding: 0;
 }

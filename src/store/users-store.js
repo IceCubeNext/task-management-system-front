@@ -4,6 +4,7 @@ import api from "@/services/api";
 import EventBus from "@/common/EventBus";
 
 export const usersStore = new CustomStore({
+    key: "id",
     load: () => {
         return api.get(host.users, {}).then(response => {
             return response.data
@@ -34,7 +35,7 @@ export const usersStore = new CustomStore({
             })
     },
     remove: (id) => {
-        return api.delete(host.users + '/' + id,  {})
+        return api.delete(host.users + '/' + id, {})
             .then(response => {
                 return response.data;
             }).catch(error => {
@@ -42,5 +43,15 @@ export const usersStore = new CustomStore({
                     EventBus.dispatch("logout");
                 }
             })
-    }
+    },
+    byKey: (key) => {
+        return api.get(host.users + '/' + `${key}`, {})
+            .then(response => {
+                return response.data
+            }).catch(error => {
+                if (error.response && error.response.status === 403) {
+                    EventBus.dispatch("logout");
+                }
+            })
+    },
 })
